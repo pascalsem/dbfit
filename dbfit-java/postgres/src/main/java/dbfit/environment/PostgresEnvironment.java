@@ -99,6 +99,8 @@ public class PostgresEnvironment extends AbstractDbEnvironment {
             .asList(new String[] { "REFCURSOR" });
     private static List<String> booleanTypes = Arrays.asList(new String[] {
             "BOOL", "BOOLEAN" });
+    private static final List<String> jsonTypes = Arrays.asList(new String[] {
+            "JSONB", "JSON"});
 
     private static String normaliseTypeName(String dataType) {
         dataType = dataType.toUpperCase().trim();
@@ -129,6 +131,8 @@ public class PostgresEnvironment extends AbstractDbEnvironment {
             return java.sql.Types.REF;
         if (booleanTypes.contains(dataType))
             return java.sql.Types.BOOLEAN;
+        if (jsonTypes.contains(dataType))
+            return java.sql.Types.OTHER;
         throw new UnsupportedOperationException("Type " + dataType
                 + " is not supported");
     }
@@ -155,6 +159,8 @@ public class PostgresEnvironment extends AbstractDbEnvironment {
             return java.sql.Timestamp.class;
         if (booleanTypes.contains(dataType))
             return Boolean.class;
+        if (jsonTypes.contains(dataType))
+            return PGobject.class;
         throw new UnsupportedOperationException("Type " + dataType
                 + " is not supported");
     }
